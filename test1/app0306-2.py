@@ -1,29 +1,30 @@
-from flask import Flask, render_template, redirect, request
-                          # 자바에서는 foward
-app = Flask(__name__)
+# 로그인 화면 보여주기
+# 로그인 처리하기 :spring/1234
+# 로그인 성공화면
+# 로그인을 실패하면 로그인 화면으로 돌아가기
 
-# flask 문서에서 주소가 같으면 안되지만 methods 가 다르다면 같아도 됨
-# get 방식은 다 render_template
-# post 방식은 다 redirect
+from flask import Flask, render_template, redirect, request
+app = Flask(__name__)
 
 @app.route("/login", methods=['get'])
 def login_get():
-    state = request.args.get('state', None)
+    state=request.args.get('state', None)
     message = "로그인에 실패했습니다" if state!=None else ""
     return render_template("login.html", message=message)
 
 @app.route("/login", methods=['post'])
 def login_post():
-    username=request.form.get("username")
-    password=request.form.get("password")
+    username = request.form.get("username")
+    password = request.form.get("password")
     if username=='spring' and password=='1234':
         return redirect("/success")
     else:
-        return redirect("login?state=fail")
+        return redirect("/login?state=fail")
 
-@app.route("/success")
+
+@app.route("/success")    # 아무것도 안 적으면 get
 def success():
     return render_template("success.html")
 
-
 app.run(debug=True)
+
